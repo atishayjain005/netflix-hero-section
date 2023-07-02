@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import React from "react";
@@ -18,7 +17,7 @@ const HeroLogo = React.memo(({ screen }) => {
 });
 
 export default function HeroSection() {
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [screenWidth, setScreenWidth] = useState(null);
   const [screen, setScreen] = useState(true);
 
   const handleResize = () => {
@@ -26,18 +25,18 @@ export default function HeroSection() {
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setScreenWidth(window.innerWidth);
-      window.addEventListener("resize", handleResize);
+    setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
 
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
-    }
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   useEffect(() => {
-    screenWidth < 440 ? setScreen(false) : setScreen(true);
+    if (typeof window !== "undefined" && screenWidth) {
+      setScreen(screenWidth < 440 ? false : true);
+    }
   }, [screenWidth]);
 
   return (
